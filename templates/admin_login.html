@@ -3,7 +3,7 @@
 <head><meta charset="UTF-8"><title>Admin — reelhouse</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
 <body>
-<nav><div class="logo"><a href="{{ url_for('home') }}">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div></nav>
+<nav><div class="logo"><a href="{{ url_for('home') }}" style="display:flex; align-items:center; gap:7px;"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="20" height="20">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div></nav>
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
 {% endwith %}

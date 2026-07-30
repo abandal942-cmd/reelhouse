@@ -8,7 +8,7 @@
 <body>
 
 <nav>
-  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a></div>
+  <div class="logo"><a href="{{ url_for('home') }}" style="display:flex; align-items:center; gap:8px;"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="24" height="24">reelhouse</a></div>
   <div class="navright">
     {% if user %}<span>{{ user.name }}</span><a href="{{ url_for('logout') }}">Log out</a>
     {% else %}<a href="{{ url_for('login') }}">Log in</a>{% endif %}

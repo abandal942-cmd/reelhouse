@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
 <body>
 <nav>
-  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div>
+  <div class="logo"><a href="{{ url_for('home') }}" style="display:flex; align-items:center; gap:7px;"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="20" height="20">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div>
   <div class="navright">
     <a href="{{ url_for('admin_new_video') }}" class="btn btn-gold">+ New title</a>
     <a href="{{ url_for('admin_logout') }}">Log out</a>

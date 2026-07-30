@@ -155,10 +155,13 @@ def video_detail(video_id):
     video = Video.query.get_or_404(video_id)
     if not video.is_published:
         abort(404)
+
     user = current_user()
-    in_my_list = False
-    if user:
-        in_my_list = MyListItem.query.filter_by(user_id=user.id, video_id=video.id).first() is not None
+    if not user:
+        flash("Create an account to watch this title.", "error")
+        return redirect(url_for("register", next=request.path))
+
+    in_my_list = MyListItem.query.filter_by(user_id=user.id, video_id=video.id).first() is not None
     return render_template("detail.html", video=video, user=user, in_my_list=in_my_list)
 
 
@@ -206,7 +209,7 @@ def register():
 
         session["user_id"] = user.id
         flash("Account created.", "success")
-        return redirect(url_for("home"))
+        return redirect(request.args.get("next") or url_for("home"))
 
     return render_template("register.html")
 
