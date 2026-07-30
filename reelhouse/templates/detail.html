@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ video.title }} — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a></div>
+  <div class="navright">
+    {% if user %}<span>{{ user.name }}</span><a href="{{ url_for('logout') }}">Log out</a>
+    {% else %}<a href="{{ url_for('login') }}">Log in</a>{% endif %}
+  </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+
+<section class="detail-hero">
+  <div class="detail-poster" style="background-image:url('{{ url_for('poster_file', filename=video.poster_filename) }}');"></div>
+  <div>
+    <div class="detail-title">{{ video.title }}</div>
+    <div class="detail-meta">{{ video.category|upper }} · {{ video.year }} · {{ video.genre }}</div>
+    <p class="detail-desc">{{ video.description }}</p>
+    <ul class="points">
+      <li>{{ video.point1 }}</li>
+      <li>{{ video.point2 }}</li>
+      <li>{{ video.point3 }}</li>
+    </ul>
+    <div class="detail-actions">
+      {% if user %}
+        <form method="POST" action="{{ url_for('toggle_my_list', video_id=video.id) }}">
+          <button class="btn {{ 'btn-ghost' if in_my_list else 'btn-gold' }}">
+            {{ '✓ In My List' if in_my_list else '+ Add to My List' }}
+          </button>
+        </form>
+      {% else %}
+        <a class="btn btn-gold" href="{{ url_for('login') }}">Log in to add to My List</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="player">
+  <video controls poster="{{ url_for('poster_file', filename=video.poster_filename) }}">
+    <source src="{{ url_for('video_file', filename=video.video_filename) }}">
+  </video>
+</section>
+
+</body>
+</html>

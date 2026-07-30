@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>{{ 'Edit' if video else 'New' }} title — reelhouse admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav>
+  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div>
+  <div class="navright"><a href="{{ url_for('admin_dashboard') }}">← Dashboard</a></div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+<div class="admin-wrap">
+  <h1 style="font-family:'Bricolage Grotesque'; margin:20px 0;">{{ 'Edit title' if video else 'Add new title' }}</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="field full">
+        <label>Movie / show name</label>
+        <input type="text" name="title" value="{{ video.title if video else '' }}" required>
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select name="category">
+          <option value="film" {{ 'selected' if video and video.category=='film' }}>Film</option>
+          <option value="series" {{ 'selected' if video and video.category=='series' }}>Series</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Genre</label>
+        <input type="text" name="genre" value="{{ video.genre if video else '' }}" placeholder="Thriller, Drama...">
+      </div>
+
+      <div class="field">
+        <label>Year</label>
+        <input type="text" name="year" value="{{ video.year if video else '' }}">
+      </div>
+      <div class="field">
+        <label>Homepage row</label>
+        <input type="text" name="row_section" value="{{ video.row_section if video else 'Trending Now' }}">
+      </div>
+
+      <div class="field full">
+        <label>Description</label>
+        <textarea name="description">{{ video.description if video else '' }}</textarea>
+      </div>
+
+      <div class="field full">
+        <label>Point 1 (required to publish)</label>
+        <input type="text" name="point1" value="{{ video.point1 if video else '' }}" required>
+      </div>
+      <div class="field full">
+        <label>Point 2 (required to publish)</label>
+        <input type="text" name="point2" value="{{ video.point2 if video else '' }}" required>
+      </div>
+      <div class="field full">
+        <label>Point 3 (required to publish)</label>
+        <input type="text" name="point3" value="{{ video.point3 if video else '' }}" required>
+      </div>
+
+      <div class="field">
+        <label>Poster image {{ '(uploaded)' if video and video.poster_filename else '(required to publish)' }}</label>
+        <input type="file" name="poster" accept=".jpg,.jpeg,.png,.webp">
+      </div>
+      <div class="field">
+        <label>Video file {{ '(uploaded)' if video and video.video_filename else '(required to publish)' }}</label>
+        <input type="file" name="video" accept=".mp4,.webm,.mov">
+      </div>
+    </div>
+
+    <button class="btn btn-gold" style="margin-top:10px; width:auto; padding:12px 28px;">
+      {{ 'Save changes' if video else 'Save title' }}
+    </button>
+  </form>
+</div>
+</body>
+</html>

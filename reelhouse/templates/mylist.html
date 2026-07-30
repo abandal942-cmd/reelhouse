@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>My List — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav>
+  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a></div>
+  <div class="navright"><span>{{ user.name }}</span><a href="{{ url_for('logout') }}">Log out</a></div>
+</nav>
+<section class="rows">
+  <div class="row-head" style="padding-top:24px;"><div class="row-title" style="font-size:24px;">My List</div></div>
+  {% if videos %}
+  <div class="row-track">
+    {% for v in videos %}
+    <a class="card" href="{{ url_for('video_detail', video_id=v.id) }}"
+       style="background-image:url('{{ url_for('poster_file', filename=v.poster_filename) }}');">
+      <div class="card-shade"></div>
+      <div class="card-info"><div class="card-title">{{ v.title }}</div><div class="card-year">{{ v.year }}</div></div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">Nothing here yet — add titles from any detail page.</div>
+  {% endif %}
+</section>
+</body>
+</html>

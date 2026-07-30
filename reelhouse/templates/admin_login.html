@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Admin — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav><div class="logo"><a href="{{ url_for('home') }}">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div></nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+<div class="form-page">
+  <h1>Content dashboard</h1>
+  <form method="POST">
+    <div class="field"><label>Admin password</label><input type="password" name="password" required></div>
+    <button class="btn btn-gold">Enter</button>
+  </form>
+</div>
+</body>
+</html>

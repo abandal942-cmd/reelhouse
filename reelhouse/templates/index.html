@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav>
+  <div class="logo">reelhouse</div>
+  <ul class="navlinks">
+    <li><a href="{{ url_for('home') }}#films">Films</a></li>
+    <li><a href="{{ url_for('home') }}#series">Series</a></li>
+    {% if user %}<li><a href="{{ url_for('my_list') }}">My List</a></li>{% endif %}
+  </ul>
+  <div class="navright">
+    {% if user %}
+      <span>{{ user.name }}</span>
+      <a href="{{ url_for('logout') }}">Log out</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Log in</a>
+      <a href="{{ url_for('register') }}" class="btn btn-gold">Sign up</a>
+    {% endif %}
+  </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}
+    <div class="flash {{ category }}">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+
+<section class="rows">
+
+  <h2 style="padding:0 48px; font-family:'Bricolage Grotesque'; margin-bottom:12px;" id="films">Films</h2>
+  {% if film_rows %}
+    {% for section, videos in film_rows.items() %}
+    <div class="row">
+      <div class="row-head"><div class="row-title">{{ section }}</div></div>
+      <div class="row-track">
+        {% for v in videos %}
+        <a class="card" href="{{ url_for('video_detail', video_id=v.id) }}"
+           style="background-image:url('{{ url_for('poster_file', filename=v.poster_filename) }}');">
+          <div class="card-shade"></div>
+          <div class="card-info">
+            <div class="card-title">{{ v.title }}</div>
+            <div class="card-year">{{ v.year }}{% if v.id in my_list_ids %} · IN MY LIST{% endif %}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-row">No films published yet.</div>
+  {% endif %}
+
+  <h2 style="padding:0 48px; font-family:'Bricolage Grotesque'; margin:32px 0 12px;" id="series">Series</h2>
+  {% if series_rows %}
+    {% for section, videos in series_rows.items() %}
+    <div class="row">
+      <div class="row-head"><div class="row-title">{{ section }}</div></div>
+      <div class="row-track">
+        {% for v in videos %}
+        <a class="card" href="{{ url_for('video_detail', video_id=v.id) }}"
+           style="background-image:url('{{ url_for('poster_file', filename=v.poster_filename) }}');">
+          <div class="card-shade"></div>
+          <div class="card-info">
+            <div class="card-title">{{ v.title }}</div>
+            <div class="card-year">{{ v.year }}{% if v.id in my_list_ids %} · IN MY LIST{% endif %}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-row">No series published yet.</div>
+  {% endif %}
+
+</section>
+
+</body>
+</html>

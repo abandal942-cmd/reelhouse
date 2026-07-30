@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Admin dashboard — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav>
+  <div class="logo"><a href="{{ url_for('home') }}">reelhouse</a> <span style="color:var(--muted); font-size:13px;">/ admin</span></div>
+  <div class="navright">
+    <a href="{{ url_for('admin_new_video') }}" class="btn btn-gold">+ New title</a>
+    <a href="{{ url_for('admin_logout') }}">Log out</a>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+<div class="admin-wrap">
+  <p style="color:var(--muted); font-size:13px;">A title only appears on the live site once every required field (poster, video file, 3 points) is filled in.</p>
+  <table class="admin-table">
+    <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Row</th><th></th></tr></thead>
+    <tbody>
+      {% for v in videos %}
+      <tr>
+        <td>{{ v.title or "(untitled)" }}</td>
+        <td>{{ v.category }}</td>
+        <td>{% if v.is_published %}<span class="status-live">Live</span>{% else %}<span class="status-draft">Draft — incomplete</span>{% endif %}</td>
+        <td>{{ v.row_section }}</td>
+        <td class="admin-actions">
+          <a href="{{ url_for('admin_edit_video', video_id=v.id) }}">Edit</a>
+          {% if v.is_published %}
+          <form style="display:inline" method="POST" action="{{ url_for('admin_unpublish', video_id=v.id) }}">
+            <button type="submit">Unpublish</button>
+          </form>
+          {% endif %}
+          <form style="display:inline" method="POST" action="{{ url_for('admin_delete_video', video_id=v.id) }}" onsubmit="return confirm('Delete this title?');">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" style="color:var(--muted);">No titles yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

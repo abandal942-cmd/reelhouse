@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Log in — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav><div class="logo"><a href="{{ url_for('home') }}">reelhouse</a></div></nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+<div class="form-page">
+  <h1>Log in</h1>
+  <form method="POST">
+    <div class="field"><label>Email</label><input type="email" name="email" required></div>
+    <div class="field"><label>Password</label><input type="password" name="password" required></div>
+    <button class="btn btn-gold">Log in</button>
+  </form>
+  <div class="form-switch">No account? <a href="{{ url_for('register') }}">Sign up</a></div>
+</div>
+</body>
+</html>
