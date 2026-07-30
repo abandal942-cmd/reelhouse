@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav>
+  <div class="logo">reelhouse</div>
+  <ul class="navlinks">
+    <li><a href="{{ url_for('home') }}#films">Films</a></li>
+    <li><a href="{{ url_for('home') }}#series">Series</a></li>
+    {% if user %}<li><a href="{{ url_for('my_list') }}">My List</a></li>{% endif %}
+  </ul>
+  <div class="navright">
+    {% if user %}
+      <span>{{ user.name }}</span>
+      <a href="{{ url_for('logout') }}">Log out</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Log in</a>
+      <a href="{{ url_for('register') }}" class="btn btn-gold">Sign up</a>
+    {% endif %}
+  </div>
+</nav>
+<div class="sprocket-rule"></div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}
+    <div class="flash {{ category }}">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+
+{% if not film_rows and not series_rows %}
+<section class="landing-hero">
+  <div class="eyebrow">Now screening — nothing yet</div>
+  <h1>Your screening room is set up. Time to load the reel.</h1>
+  <p>Titles you publish from the content dashboard show up here automatically, sorted into Films and Series. Nothing goes live until every detail — poster, video, and the three highlights — is filled in.</p>
+  <a href="{{ url_for('admin_login') }}" class="btn btn-gold">Open content dashboard</a>
+</section>
+{% endif %}
+
+<section class="rows">
+
+  <div class="section-label" id="films">
+    <h2>Films</h2>
+    <span class="count">{{ film_rows.values()|sum(attribute='__len__') if film_rows else 0 }} TITLES</span>
+  </div>
+  {% if film_rows %}
+    {% for section, videos in film_rows.items() %}
+    <div class="row">
+      <div class="row-head"><div class="row-title">{{ section }}</div></div>
+      <div class="row-track">
+        {% for v in videos %}
+        <a class="card" href="{{ url_for('video_detail', video_id=v.id) }}"
+           style="background-image:url('{{ url_for('poster_file', filename=v.poster_filename) }}');">
+          <div class="card-shade"></div>
+          <div class="card-info">
+            <div class="card-title">{{ v.title }}</div>
+            <div class="card-year">{{ v.year }}{% if v.id in my_list_ids %} · IN MY LIST{% endif %}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <div class="marquee-empty">
+    <div>
+      <div class="m-eyebrow">Reel 01</div>
+      <h3>No films published yet</h3>
+      <p>Add a film from the content dashboard — it appears here the moment it's complete.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="section-label" id="series">
+    <h2>Series</h2>
+    <span class="count">{{ series_rows.values()|sum(attribute='__len__') if series_rows else 0 }} TITLES</span>
+  </div>
+  {% if series_rows %}
+    {% for section, videos in series_rows.items() %}
+    <div class="row">
+      <div class="row-head"><div class="row-title">{{ section }}</div></div>
+      <div class="row-track">
+        {% for v in videos %}
+        <a class="card" href="{{ url_for('video_detail', video_id=v.id) }}"
+           style="background-image:url('{{ url_for('poster_file', filename=v.poster_filename) }}');">
+          <div class="card-shade"></div>
+          <div class="card-info">
+            <div class="card-title">{{ v.title }}</div>
+            <div class="card-year">{{ v.year }}{% if v.id in my_list_ids %} · IN MY LIST{% endif %}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <div class="marquee-empty">
+    <div>
+      <div class="m-eyebrow">Reel 02</div>
+      <h3>No series published yet</h3>
+      <p>Add a series from the content dashboard — it appears here the moment it's complete.</p>
+    </div>
+  </div>
+  {% endif %}
+
+</section>
+
+</body>
+</html>

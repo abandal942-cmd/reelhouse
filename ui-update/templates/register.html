@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Sign up — reelhouse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+<nav><div class="logo"><a href="{{ url_for('home') }}">reelhouse</a></div></nav>
+<div class="sprocket-rule"></div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, msg in messages %}<div class="flash {{ category }}">{{ msg }}</div>{% endfor %}
+{% endwith %}
+
+<div class="auth-wrap">
+  <div class="auth-visual">
+    <div class="quote-mark">"</div>
+    <h2>One account. Every title you save, kept in one list.</h2>
+    <p>SCENE 01 / TAKE 01</p>
+  </div>
+  <div class="auth-form-side">
+    <div class="form-page">
+      <div class="kicker">Get started</div>
+      <h1>Create your account</h1>
+      <div class="sub">Takes about ten seconds.</div>
+      <form method="POST">
+        <div class="field"><label>Name</label><input type="text" name="name" required></div>
+        <div class="field"><label>Email</label><input type="email" name="email" required></div>
+        <div class="field"><label>Password</label><input type="password" name="password" required minlength="6"></div>
+        <button class="btn btn-gold">Sign up</button>
+      </form>
+      <div class="form-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
